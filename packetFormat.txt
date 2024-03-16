@@ -1,0 +1,68 @@
+
+Internet Protocol Version 4
+    Version:Header Length					:1B(4b+4b)
+    Differentiated Services Field				:1B
+    Total Length						:2B
+    Identification						:2B
+    Flags							:3b
+    Fragment Offset						:13b
+    Time to Live						:1B
+    Protocol (0x06 for TCP)					:1B
+    Header Checksum						:2B
+    Source Address						:4B
+    Destination Address						:4B
+
+
+Transmission Control Protocol
+    Source Port							:2B
+    Destination Port						:2B
+    Sequence Number (raw)					:4B
+    Acknowledgment number (raw)					:4B
+    Header Length						:1B
+    Flags							:2B
+    Window [Window size scaling factor 128]			:2B
+    Checksum							:2B
+    Urgent Pointer						:2B										
+    Options							:12B
+
+Domain Name System (query)
+    Transaction ID						:2B
+    Flags							:2B	
+        0... .... .... .... = Response: Message is a query
+        .000 0... .... .... = Opcode: Standard query (0)
+        .... ..0. .... .... = Truncated: Message is not truncated
+        .... ...1 .... .... = Recursion desired: Do query recursively
+        .... .... .0.. .... = Z: reserved (0)
+        .... .... ...0 .... = Non-authenticated data: Unacceptable
+    Questions							:2B
+    Answer RRs							:2B
+    Authority RRs						:2B
+    Additional RRs						:2B
+    Queries
+    Additional records
+    
+    
+ Domain Name System (response)
+    Transaction ID						:2B   
+    Flags							:2B
+    1... .... .... .... = Response: Message is a response
+    .000 0... .... .... = Opcode: Standard query (0)
+    .... .0.. .... .... = Authoritative: Server is not an authority for domain
+    .... ..0. .... .... = Truncated: Message is not truncated
+    .... ...1 .... .... = Recursion desired: Do query recursively
+    .... .... 1... .... = Recursion available: Server can do recursive queries
+    .... .... .0.. .... = Z: reserved (0)
+    .... .... ..0. .... = Answer authenticated: Answer/authority portion was not authenticated by the server
+    .... .... ...0 .... = Non-authenticated data: Unacceptable
+    .... .... .... 0000 = Reply code: No error (0)
+    Questions							:2B
+    Answer RRs							:2B
+    Authority RRs						:2B
+    Additional RRs						:2B
+    Queries
+    Answers
+    Authoritative Nameservers
+    Additional Records
+
+
+For HTTP just print entire HTTP payload byte by byte
