@@ -57,6 +57,12 @@ Transmission Control Protocol
     Urgent Pointer						            :2B							
     Options							                :12B
 
+User Datagram Protocol
+1. Source Port                                        :2B
+2. Destination Port                                   :2B 
+3. Length                                             :2B
+4. Checksum                                           :2B
+
 
 ////////////////////////////////////////////// Application Layer ///////////////////////////////////////////
 
