@@ -132,7 +132,7 @@ void getMacIp(int sock_recv,char * interfaceName,unsigned char *Ip,unsigned char
     	
     ip = (struct sockaddr *)malloc(sizeof(struct sockaddr));
     memcpy(ip,&ifr.ifr_addr,sizeof(struct sockaddr));
-    printf("My IP is : %s\n",inet_ntop(ip->sa_family,&(((struct sockaddr_in*)ip)->sin_addr),Ip,sizeof(Ip)));
+    printf("My IP is : %s\n",inet_ntop(ip->sa_family,&(((struct sockaddr_in*)ip)->sin_addr),Ip,INET6_ADDRSTRLEN));
         
     if(ioctl(sock_recv,SIOCGIFHWADDR,&ifr)<0)
     	printf("Error in Mac ioctl reading"); // getting Mac address
