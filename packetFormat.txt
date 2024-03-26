@@ -4,7 +4,7 @@
 Ethernet header:
 1. Target Mac  						:6B
 2. Sender Mac   					:6B
-3. Protocol Ttpe          			:2B
+3. Protocol Ttpe          				:2B
     Eg Protocol Type = ARP (0806h) / ipv4 (0800h)
 
 
@@ -13,49 +13,49 @@ Ethernet header:
 
 Icmp header:
 1.Type : request(0x08) reply(0x00)			        :1B
-2.Code : 0x00						                :1B
-3.Checksum						                    :2B
+2.Code : 0x00						        :1B
+3.Checksum						        :2B
 4.Identifier(BE big endian):				        :2B
-5.Sequence Number(BE):					            :2B
-6.TimeStamp:						                :8B
+5.Sequence Number(BE):					        :2B
+6.TimeStamp:						        :8B
 
 Internet Protocol Version 4
-    Version:Header Length					        :1B(4b+4b)
-    Differentiated Services Field				    :1B
-    Total Length						            :2B
-    Identification						            :2B
-    Flags							                :3b
-    Fragment Offset						            :13b
-    Time to Live						            :1B
-    Protocol (0x06 for TCP)					        :1B
-    Header Checksum						            :2B
-    Source Address						            :4B
-    Destination Address						        :4B
+    Version:Header Length					:1B(4b+4b)
+    Differentiated Services Field				:1B
+    Total Length						:2B
+    Identification						:2B
+    Flags					                :3b
+    Fragment Offset		          			:13b
+    Time to Live					        :1B
+    Protocol (0x06 for TCP)				        :1B
+    Header Checksum				      		:2B
+    Source Address				      		:4B
+    Destination Address					        :4B
 
 Address Resolution Protocol
 1.Hardware type = Ethernet (0001h) 			        :2B
 2.Protocol type = IPv4 (0800h)	   			        :2B
-3.Mac length = 06h		   			                :1B
-4.ip legth = 04h		   			                :1B
-5.arp opcode = request(0001h)/ response(0002h)	   	:2B
-6.sender mac  			 			                :6B
-7.own ip    						                :4B
-8.target mac = (all 0 or all 1s) [when arp request]	:6B
-9.target ip  					 	                :4B
+3.Mac length = 06h	   			                :1B
+4.ip legth = 04h	   			                :1B
+5.arp opcode = request(0001h)/ response(0002h)		   	:2B
+6.sender mac  			 		                :6B
+7.own ip    					                :4B
+8.target mac = (all 0 or all 1s) [when arp request]		:6B
+9.target ip  					                :4B
 
 ///////////////////////////////////////////// Transport Layer //////////////////////////////////////////////
 
 Transmission Control Protocol
-    Source Port							            :2B
+    Source Port						            :2B
     Destination Port					            :2B
     Sequence Number (raw)				            :4B
-    Acknowledgment number (raw)			            :4B
-    Header Length						            :1B
-    Flags							                :2B
-    Window [Window size scaling factor 128]			:2B
-    Checksum							            :2B
-    Urgent Pointer						            :2B							
-    Options							                :12B
+    Acknowledgment number (raw)				            :4B
+    Header Length					            :1B
+    Flags					                    :2B
+    Window [Window size scaling factor 128]			    :2B
+    Checksum						            :2B
+    Urgent Pointer					            :2B							
+    Options					                    :12B
 
 User Datagram Protocol
 1. Source Port                                        :2B
