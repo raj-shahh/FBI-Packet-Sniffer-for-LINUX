@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     	printf("By default capturing All types of Packets\n");
     }
 
-//////////////////////////// Creating Socket for Receiving (Probiscus Mode)/////////////////
+//////////////////////////// Creating Socket for Receiving (Promiscous Mode)/////////////////
 int sock_recv = createRawSocket(args.interfaceName,args.protocolName);
 
 
@@ -76,50 +76,54 @@ getMacIp(sock_recv,args.interfaceName,Ip,Mac);
     	bzero(response,5000);
     	
     	saddr_len = sizeof(src_addr);
-    if ((bytes_recv=recvfrom(sock_recv, response, (size_t)5000, 0, &src_addr, &saddr_len)) < 0)	{	
-	perror("packet send failed");
-	exit(EXIT_FAILURE);
-    }
+        if ((bytes_recv=recvfrom(sock_recv, response, (size_t)5000, 0, &src_addr, &saddr_len)) < 0)	{	
+            perror("packet send failed");
+            exit(EXIT_FAILURE);
+        }
 	
-	if(checkMac(response,Mac,0) == 1){// dest Mac == My Mac (Write to myRecv)
-		    file = fopen(myRecvFilename, "a"); // Open file in append mode
-		    if (file == NULL) {
-			perror("Error opening Recv file");
-			exit(EXIT_FAILURE);
-		    }
-	}
-	else if (checkMac(response,Mac,6) == 1){// src Mac == My Mac (Write to my)
-		    file = fopen(mySendFilename, "a"); // Open file in append mode
-		    if (file == NULL) {
-			perror("Error opening Send file");
-			exit(EXIT_FAILURE);
-		    }
-	}
-	else{//Packet meant for others (Write to ProMisCuous File)
-		    file = fopen(promiscuousFilename, "a"); // Open file in append mode
-		    if (file == NULL) {
-			perror("Error opening Promiscus file");
-			exit(EXIT_FAILURE);
-		    }
-	}
+        if(checkMac(response,Mac,0) == 1){// dest Mac == My Mac (Write to myRecv)
+            file = fopen(myRecvFilename, "a"); // Open file in append mode
+            if (file == NULL) {
+                perror("Error opening Recv file");
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if (checkMac(response,Mac,6) == 1){// src Mac == My Mac (Write to my)
+            file = fopen(mySendFilename, "a"); // Open file in append mode
+            if (file == NULL) {
+                perror("Error opening Send file");
+                exit(EXIT_FAILURE);
+            }
+        }
+        else{//Packet meant for others (Write to ProMisCuous File)
+            file = fopen(promiscuousFilename, "a"); // Open file in append mode
+            if (file == NULL) {
+                perror("Error opening Promiscus file");
+                exit(EXIT_FAILURE);
+            }   
+	    }
 	
-	printPacket(file,response,0,bytes_recv);
+	    printPacket(file,response,0,bytes_recv);
 	
-	nextProtocol = ethernet(file,response);
+	    nextProtocol = ethernet(file,response);
+
 	
-	switch(nextProtocol){
-		case 0x0806 : //arp
-		fprintf(file,"\tNetwork Layer Protocol is ARP\n");
-		break;
-		case 0x0800 : //ipv4
-		fprintf(file,"\tNetwork Layer Protocol is ipv4\n");
-		break;
-		case 0x86dd : //ipv6
-		fprintf(file,"\tNetwork Layer Protocol is ipv6\n");
-		break;
-	}
-	
-	fclose(file); 
+        switch(nextProtocol){
+            case 0x0806 : //arp
+            fprintf(file,"\tNetwork Layer Protocol is ARP\n");
+            break;
+            case 0x0800 : //ipv4
+            fprintf(file,"\tNetwork Layer Protocol is ipv4\n");
+            struct ipReturn ret= myipv4(file,&response[14]);
+            mytcp(file,&response[14+ret.ipHeaderLength]);
+            break;
+            case 0x86dd : //ipv6
+            fprintf(file,"\tNetwork Layer Protocol is ipv6\n");
+            struct ipReturn ret1= myipv6(file,&response[14]);
+            mytcp(file,&response[14+ret1.ipHeaderLength]);
+            break;
+	    }
+	    fclose(file); 
     }
 
 
