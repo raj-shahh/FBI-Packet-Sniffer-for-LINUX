@@ -2,7 +2,7 @@ CC = gcc
 
 SRCS = $(wildcard *.c)     # Get all .c files in the directory
 OBJS = $(SRCS:.c=.o)       # Generate .o filenames from .c filenames
-MAIN = main.out            # Name of the final executable
+MAIN = fbi            # Name of the final executable
 
 # Rule to compile each .c file into .o file
 %.o: %.c
@@ -16,3 +16,4 @@ $(MAIN): $(OBJS)
 
 clear:
 	rm -f $(OBJS) $(MAIN)
+

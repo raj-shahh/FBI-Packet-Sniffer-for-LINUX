@@ -13,8 +13,13 @@ struct tcpReturn{
 ////////////////////////////Protocols Supported //////////////////
 uint16_t ethernet(FILE * fp, unsigned char * packet);
 
+void arp(FILE * fp, unsigned char * packet);
+
+struct tcpReturn udp(FILE * fp, unsigned char * packet);
+
 struct ipReturn myipv4(FILE * fp, unsigned char * packet);
 
 struct ipReturn myipv6(FILE * fp, unsigned char * packet);
 
 struct tcpReturn mytcp(FILE * fp, unsigned char * packet);
+
