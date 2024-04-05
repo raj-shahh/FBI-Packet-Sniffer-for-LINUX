@@ -16,7 +16,7 @@ int createRawSocket(const char* interfaceName,const char* protocolName);
 
 void getMacIp(int sock_recv,char * interfaceName,unsigned char *Ip,unsigned char *Mac);
 
-void writeToFile(const char *filename, const char *text);
+void writeHeaderToFile(const char *filename, const char *text,unsigned char *Ip,unsigned char * Mac,char * interfaceName);
 
 void printPacket(FILE * fp,unsigned char *packet, int start, int end);
 

@@ -64,5 +64,5 @@ struct tcpReturn mytcp(FILE* fp, unsigned char* packet){
     ret.src_port = src_port;
     ret.dest_port = dest_port;
     ret.header_length = header_length;
-    
+    return ret;
 }

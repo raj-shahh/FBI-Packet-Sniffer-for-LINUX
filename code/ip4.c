@@ -31,7 +31,7 @@ struct ipReturn myipv4(FILE* fp, unsigned char* packet){
     uint16_t fragment_offset = flags_fragoff & ((1<<13)-1);
     
 
-    fprintf(fp,"\nNetwork Layer Analysis of the packet\n");
+    fprintf(fp,"\nNetwork Layer Protocol Analysis of the above packet\n");
     fprintf(fp,"\t:IPv4 Header\n");
     fprintf(fp,"Version : %.2X\n", v_hl>>4);
     fprintf(fp,"Header Length: %d\n", 4*(15&v_hl));
