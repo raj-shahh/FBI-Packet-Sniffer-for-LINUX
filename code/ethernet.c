@@ -3,7 +3,7 @@
 
 uint16_t ethernet(FILE * fp, unsigned char * packet) {
     	    		
-	        fprintf(fp,"\nData Link Layer Protocol Analysis of the above Packet\n");
+	    fprintf(fp,"\nData Link Layer Protocol Analysis of the above Packet\n");
 		fprintf(fp,"\t:Ethernet Header\n");
 		fprintf(fp,"Destn mac : ");	
 		for (int i = 0; i < 6; i++) {
