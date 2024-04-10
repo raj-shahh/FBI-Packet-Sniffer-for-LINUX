@@ -74,23 +74,8 @@ struct Arguments parseArguments(int argc, char *argv[]) {
 int createRawSocket(const char* interfaceName,const char* protocolName) {
     int sock_recv;
 
-    if (protocolName == NULL) {
-        // Protocol name is NULL, create a raw socket for all protocols
-        sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-    } else if (strcmp(protocolName, "arp") == 0) {
-        // Protocol name is ARP
-        sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
-    } else if (strcmp(protocolName, "ip") == 0) {
-        // Protocol name is IP
-        sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
-    } else if (strcmp(protocolName, "ipv6") == 0) {
-        // Protocol name is IPv6
-        sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_IPV6));
-    } else {
-        // Unsupported protocol receive all
-        sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-    }
-
+    sock_recv = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+     
     if (sock_recv == -1) {
         perror("socket creation failed");
         exit(EXIT_FAILURE);

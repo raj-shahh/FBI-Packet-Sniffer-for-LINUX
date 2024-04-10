@@ -13,6 +13,46 @@ int main(int argc, char *argv[]) {
 
     ////////////////////////////////// Parse command line arguments //////////////////
     struct Arguments args = parseArguments(argc, argv);
+	
+
+	if(args.protocolName == NULL){
+		for(int i=0;i<L3_FLAG_LEN;i++) l3flags[i]=1;
+		for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=1;
+		for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+	}else{
+
+		for(int i=0;i<L3_FLAG_LEN;i++) l3flags[i]=0;
+		for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=0;
+		for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=0;
+
+		if(strcmp(args.protocolName,"arp")){
+			l3flags[ARP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"ipv4")){
+			l3flags[IPV4_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"ipv6")){
+			l3flags[IPV6_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"icmp")){
+			l4flags[ICMP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"tcp")){
+			l4flags[TCP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"udp")){
+			l4flags[UDP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"http")){
+			l5flags[HTTP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"https")){
+			l5flags[HTTPS_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"telnet")){
+			l5flags[TELNET_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"ftp")){
+			l5flags[FTP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"smtp")){
+			l5flags[SMTP_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"dns")){
+			l5flags[DNS_FLAG_IND] = 1;
+		}else if(strcmp(args.protocolName,"ssh")){
+			l5flags[SSH_FLAG_IND] = 1;
+		}
+	}
 
     // Print parsed arguments
     //printf("Received Interface Name: %s\n", args.interfaceName);
@@ -109,7 +149,6 @@ getMacIp(sock_recv,args.interfaceName,Ip,Mac);
 	printPacket(file,response,0,bytes_recv);
 	
 	nextProtocol = ethernet(file,response);
-
 	
 	switch(nextProtocol){
 		case 0x0806 : //arp

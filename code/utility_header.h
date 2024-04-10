@@ -21,3 +21,26 @@ void writeHeaderToFile(const char *filename, const char *text,unsigned char *Ip,
 void printPacket(FILE * fp,unsigned char *packet, int start, int end);
 
 int checkMac(unsigned char* packet,const unsigned char *mac,int start);
+
+#define L3_FLAG_LEN     3
+#define ARP_FLAG_IND    0
+#define IPV4_FLAG_IND   1
+#define IPV6_FLAG_IND   2
+unsigned char l3flags[3];
+
+#define L4_FLAG_LEN     3
+#define ICMP_FLAG_IND   0
+#define TCP_FLAG_IND    1
+#define UDP_FLAG_IND    2
+unsigned char l4flags[3];
+
+
+#define L5_FLAG_LEN     7
+#define HTTP_FLAG_IND   0
+#define HTTPS_FLAG_IND  1
+#define TELNET_FLAG_IND 2
+#define FTP_FLAG_IND    3
+#define SMTP_FLAG_IND   4
+#define DNS_FLAG_IND    5
+#define SSH_FLAG_IND    6
+unsigned char l5flags[7];
