@@ -28,7 +28,7 @@ struct ipReturn myipv6(FILE * fp, unsigned char * packet){
         dip6[i-8] = packet[i+16]; 
     }
 
-    fprintf(fp,"\n\nNetwork Layer Analysis of the packet\n");
+    fprintf(fp,"\nNetwork Layer Protocol Analysis of the above packet\n");
     fprintf(fp,"\t:IPv6 Header\n");
     fprintf(fp,"Version : %.2X\n", version);
     fprintf(fp,"Traffic Class: 0x%.2X\n", traffic_class);

@@ -5,7 +5,7 @@
 
 // Function to print usage instructions
 void printUsage() {
-    printf("Correct Usage Format: ./fbi.out -i interface_Name [-n number_Of_packets] [-p protocol_name]\n");
+    printf("Correct Usage Format: ./fbi -i interface_Name [-n number_Of_packets] [-p protocol_name]\n");
 }
 
 // Function to parse command line arguments
@@ -127,16 +127,18 @@ void getMacIp(int sock_recv,char * interfaceName,unsigned char *Ip,unsigned char
     printf("\nInterface name is : %s and id is %d\n",ifr.ifr_name,ifIndex);
 
     
-    if(ioctl(sock_recv,SIOCGIFADDR,&ifr)<0) printf("Error in Mac ioctl reading\n");
+    if(ioctl(sock_recv,SIOCGIFADDR,&ifr)<0)
+    	printf("error in Ip ioctl reading");// getting Ip address
+    	
     ip = (struct sockaddr *)malloc(sizeof(struct sockaddr));
     memcpy(ip,&ifr.ifr_addr,sizeof(struct sockaddr));
-    printf("My IP is : %s\n",inet_ntop(ip->sa_family,&(((struct sockaddr_in*)ip)->sin_addr),Ip,INET6_ADDRSTRLEN));
+    printf("Your IP is : %s\n",inet_ntop(ip->sa_family,&(((struct sockaddr_in*)ip)->sin_addr),Ip,INET6_ADDRSTRLEN));
         
     if(ioctl(sock_recv,SIOCGIFHWADDR,&ifr)<0)
-    	printf("Error in Mac ioctl reading\n"); // getting Mac address
+    	printf("Error in Mac ioctl reading"); // getting Mac address
     mac = (struct sockaddr *)malloc(sizeof(struct sockaddr));
     memcpy(mac,&ifr.ifr_hwaddr,sizeof(struct sockaddr));
-    printf("My MAC Address is : ");
+    printf("Your MAC Address is : ");
     for(int i=0;i<6;i++){
         Mac[i]=(unsigned char)mac->sa_data[i];
         printf("%02X",(unsigned char)Mac[i]);
@@ -146,21 +148,38 @@ void getMacIp(int sock_recv,char * interfaceName,unsigned char *Ip,unsigned char
 }
 
 
-void writeToFile(const char *filename, const char *text) {
+void writeHeaderToFile(const char *filename, const char *text,unsigned char *Ip,unsigned char * Mac,char * interfaceName) {
     FILE *file = fopen(filename, "a"); // Open file in append mode
     if (file == NULL) {
         perror("Error opening file");
         exit(EXIT_FAILURE);
     }
-
+    
+    fprintf(file,"\n########################################################################\n\n");
     fprintf(file, "%s\n", text); // Write text to file
+    fprintf(file, "Your network interface is : %s\n",interfaceName);
+    fprintf(file, "Your Ip is : %s\n",Ip);
+    fprintf(file, "Your Mac is : ");
+    for(int i=0;i<6;i++){
+        fprintf(file,"%02x",(unsigned char)Mac[i]);
+        if(i!=5) fprintf(file,":");
+    }
+    
+    fprintf(file,"\n\nA packet can be broken down into the following segements\n");
+    fprintf(file,"\n-------------------------------------------\n");
+    fprintf(file,"| Layer-4 | Layer -3 | Layer-2 | Layer -1 |\n");
+    fprintf(file,"-------------------------------------------\n\n");
+    
+    fprintf(file,"Layer-4 a.k.a Data-Link-Layer: Supported Protocol - Ethernet\n");
+    fprintf(file,"Layer-3 a.k.a Network-Layer: Supported Protocol - ARP | Ipv4 | Ipv6 | Icmp\n");
+    fprintf(file,"Layer-2 a.k.a Transport-Layer: Supported Protocol - TCP | UDP \n");
+    fprintf(file,"Layer-1 a.k.a Application-Layer: Supported Protocol - DNS | *\n");
+    fprintf(file,"\n########################################################################\n\n");
     fclose(file); // Close file
 }
 
 void printPacket(FILE * fp,unsigned char *packet, int start, int end){
-   	    
-   	    fprintf(fp,"\n------------------------------------------------------\n\tByte by Byte (Hex form) representation of Packet :\n");
-   	     	
+   	       	     	
     	    for (int i = start; i < end; i++) {
         	fprintf(fp,"%02x ", packet[i]);
     		}

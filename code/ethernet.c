@@ -15,9 +15,9 @@ uint16_t ethernet(FILE * fp, unsigned char * packet) {
         		fprintf(fp,"%02x ", packet[i]);
     		}
     	    	fprintf(fp,"\n");
-    	    	fprintf(fp,"Next Layer Protocol Opcode : ");
+    	    	fprintf(fp,"Next Layer Protocol Opcode : 0x");
 		for (int i = 12; i < 14; i++) {
-        		fprintf(fp,"%02x ", packet[i]);
+        		fprintf(fp,"%02x", packet[i]);
     		}
     	    	fprintf(fp,"\n");
      
