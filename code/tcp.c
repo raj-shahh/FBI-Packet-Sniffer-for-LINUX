@@ -25,7 +25,7 @@ uint32_t byteToNum(unsigned char* packet, int i, int size){
     return ans;
 }
 
-struct tcpReturn mytcp(FILE* fp, unsigned char* packet){
+struct L2Return mytcp(FILE* fp, unsigned char* packet){
 
     uint16_t src_port = (uint16_t)byteToNum(packet,0,2);
     uint16_t dest_port = (uint16_t)byteToNum(packet,2,2);
@@ -56,11 +56,11 @@ struct tcpReturn mytcp(FILE* fp, unsigned char* packet){
     fprintf(fp,"Header Checksum : 0x%.4X\n",checksum);
     for(int i=0;i<header_length-20;i++){
         if(i==0) fprintf(fp,"Options(Byte by byte) : 0x%.2X",options[i]);
-        else if (i==header_length-21) fprintf(fp," : %.2X\n",options[i]);
-        else fprintf(fp," : %.2X",options[i]);
+        else if (i==header_length-21) fprintf(fp," : 0x%.2X\n",options[i]);
+        else fprintf(fp," : 0x%.2X",options[i]);
     }
 
-    struct tcpReturn ret;
+    struct L2Return ret;
     ret.src_port = src_port;
     ret.dest_port = dest_port;
     ret.header_length = header_length;

@@ -1,7 +1,7 @@
 #include "imports.h"
 #include "protocol_header.h"
 
-struct tcpReturn udp(FILE * fp, unsigned char * packet) {
+struct L2Return udp(FILE * fp, unsigned char * packet) {
     	    		
 	        fprintf(fp,"\nTransport Layer Protocol Analysis of the above Packet\n");
 		fprintf(fp,"\t:Udp Header\n");
@@ -11,7 +11,7 @@ struct tcpReturn udp(FILE * fp, unsigned char * packet) {
 		fprintf(fp,"CheckSum : %d\n",ntohs(*(uint16_t *)(packet + 6)));
 
 
-    struct tcpReturn ret;
+    struct L2Return ret;
     ret.src_port = ntohs(*(uint16_t *)(packet + 0));
     ret.dest_port = ntohs(*(uint16_t *)(packet + 2));
     ret.header_length = 8;

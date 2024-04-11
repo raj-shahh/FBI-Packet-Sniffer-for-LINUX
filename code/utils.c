@@ -52,7 +52,7 @@ struct Arguments parseArguments(int argc, char *argv[]) {
                 exit(EXIT_FAILURE);
             }
         } else {
-            printf("Error: Unknown flag or argument '%s'\n", argv[i]);
+            printf("Invalid Usage of FBI \n");
             printUsage();
             exit(EXIT_FAILURE);
         }
@@ -140,8 +140,9 @@ void writeHeaderToFile(const char *filename, const char *text,unsigned char *Ip,
         exit(EXIT_FAILURE);
     }
     
-    fprintf(file,"\n########################################################################\n\n");
+    fprintf(file,"\n#################################################################################################\n\n");
     fprintf(file, "%s\n", text); // Write text to file
+    fprintf(file,"Analysis of Packet can be dropped midway from a particular Layer if that layers Protocol not Supported or Doesnt Match Filter\n\n");
     fprintf(file, "Your network interface is : %s\n",interfaceName);
     fprintf(file, "Your Ip is : %s\n",Ip);
     fprintf(file, "Your Mac is : ");
@@ -156,10 +157,10 @@ void writeHeaderToFile(const char *filename, const char *text,unsigned char *Ip,
     fprintf(file,"-------------------------------------------\n\n");
     
     fprintf(file,"Layer-4 a.k.a Data-Link-Layer: Supported Protocol - Ethernet\n");
-    fprintf(file,"Layer-3 a.k.a Network-Layer: Supported Protocol - ARP | Ipv4 | Ipv6 | Icmp\n");
+    fprintf(file,"Layer-3 a.k.a Network-Layer: Supported Protocol - ARP | IPV4 | IPV6 | ICMP\n");
     fprintf(file,"Layer-2 a.k.a Transport-Layer: Supported Protocol - TCP | UDP \n");
-    fprintf(file,"Layer-1 a.k.a Application-Layer: Supported Protocol - DNS | *\n");
-    fprintf(file,"\n########################################################################\n\n");
+    fprintf(file,"Layer-1 a.k.a Application-Layer: Supported Protocol - HTTP | HTTPS | TELNET | SSH  | DNS | FTP | SMTP \n");
+    fprintf(file,"\n#################################################################################################\n\n");
     fclose(file); // Close file
 }
 
@@ -183,4 +184,66 @@ int checkMac(unsigned char* packet,const unsigned char *mac,int start){
 }
 
 
+void setFilterFlags(unsigned char * l3flags, unsigned char * l4flags, unsigned char * l5flags, struct Arguments * args){
 
+	if(args->protocolName == NULL){
+		for(int i=0;i<L3_FLAG_LEN;i++) l3flags[i]=1;
+		for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=1;
+		for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+	}else{
+
+		for(int i=0;i<L3_FLAG_LEN;i++) l3flags[i]=0;
+		for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=0;
+		for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=0;
+
+		if(strcmp(args->protocolName,"arp")==0){
+			l3flags[ARP_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"ipv4")==0){
+			l3flags[IPV4_FLAG_IND] = 1;
+			for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=1;
+			for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+		}else if(strcmp(args->protocolName,"ipv6")==0){
+			l3flags[IPV6_FLAG_IND] = 1;
+			for(int i=0;i<L4_FLAG_LEN;i++) l4flags[i]=1;
+			for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+		}else if(strcmp(args->protocolName,"icmp")==0){
+			l3flags[IPV4_FLAG_IND] =1;
+			l3flags[IPV6_FLAG_IND] =1;
+			l4flags[ICMP_FLAG_IND] =1;
+		}else if(strcmp(args->protocolName,"tcp")==0){
+			l4flags[TCP_FLAG_IND] = 1;
+			for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+		}else if(strcmp(args->protocolName,"udp")==0){
+			l4flags[UDP_FLAG_IND] = 1;
+			for(int i=0;i<L5_FLAG_LEN;i++) l5flags[i]=1;
+		}else if(strcmp(args->protocolName,"http")==0){
+			l3flags[IPV4_FLAG_IND] =1;
+			l3flags[IPV6_FLAG_IND] =1;
+			l4flags[TCP_FLAG_IND]  =1;
+			l5flags[HTTP_FLAG_IND] =1;
+		}else if(strcmp(args->protocolName,"https")==0){
+			l3flags[IPV4_FLAG_IND] =1;
+			l3flags[IPV6_FLAG_IND] =1;
+			l4flags[TCP_FLAG_IND]  =1;
+			l5flags[HTTPS_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"telnet")==0){
+			l5flags[TELNET_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"ftp")==0){
+			l5flags[FTP_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"smtp")==0){
+			l5flags[SMTP_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"dns")==0){
+			l5flags[DNS_FLAG_IND] = 1;
+		}else if(strcmp(args->protocolName,"ssh")==0){
+			l5flags[SSH_FLAG_IND] = 1;
+		}
+		else{
+			printf("\nProtocol Not Supported\n");
+			printf("List of Supported Filters\n");
+    printf("Layer-3 a.k.a Network-Layer: Supported Protocol - arp | ipv4 | ipv6 | icmp\n");
+    printf("Layer-2 a.k.a Transport-Layer: Supported Protocol - tcp | udp \n");
+    printf("Layer-1 a.k.a Application-Layer: Supported Protocol - http | https | telnet | ssh  | dns | ftp | smtp \n");
+    		exit(1);
+		}
+	}
+}

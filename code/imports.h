@@ -8,6 +8,7 @@
 #include <errno.h> //For errno - the error number
 #include <unistd.h> // sleep()
 #include <time.h>
+#include <signal.h>
 
 
 #include <sys/socket.h>	//for socket ofcourse
